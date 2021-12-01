@@ -25,7 +25,7 @@ class Day01TestSuite(unittest.TestCase):
 
     def test_part1(self):
         f = open('data/day01.txt')
-        self.assertEquals(day01.increases(list(map(int, f.read().splitlines()))), 0)
+        self.assertEquals(day01.increases(list(map(int, f.read().splitlines()))), 1529)
 
 
 if __name__ == '__main__':
