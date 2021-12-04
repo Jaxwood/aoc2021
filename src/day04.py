@@ -2,6 +2,7 @@ from typing import List, Set, Tuple
 import numpy as np
 import re
 import functools
+import queue
 
 def parse(raw: List[str]) -> Tuple[List[int], List[List[List[int]]]]:
     """parse the raw input into numbers drawn and boards"""
@@ -53,15 +54,32 @@ def play_rounds(numbers: List[int], boards: List[Set[int]]) -> Tuple[int, Set[in
                 if len(row_column) == 0:
                     return (num, board)
 
+def play_rounds_till_last_board(numbers: List[int], boards: List[Set[int]]) -> Tuple[int, Set[int]]:
+    """continue playing until the last board is full"""
+    done_boards = set()
+    for num in numbers:
+        for board_num in range(0, len(boards)):
+            if board_num in done_boards:
+                continue
+            for row_column in boards[board_num]:
+                row_column.discard(num)
+                if len(row_column) == 0:
+                    done_boards.add(board_num)
+                    if len(done_boards) == len(boards):
+                        return (num, boards[board_num])
+
 def union_except(acc: Set[int], candidate: Set[int], num: int) -> Set[int]:
     """final number should be excluded"""
     candidate.discard(num)
     return acc.union(candidate)
 
-def play(raw: List[str]) -> int:
+def play(raw: List[str], till_done: bool = False) -> int:
     """play bingo!"""
     (numbers, raw_boards) = parse(raw)
     boards = logical_board(raw_boards)
-    (num, winner) = play_rounds(numbers, boards)
+    if till_done:
+        (num, winner) = play_rounds_till_last_board(numbers, boards)
+    else:
+        (num, winner) = play_rounds(numbers, boards)
     unmarked = functools.reduce(lambda acc, next: union_except(acc, next, num), winner, set())
     return sum(unmarked) * num
