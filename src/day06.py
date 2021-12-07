@@ -1,6 +1,8 @@
 from typing import List
+import numpy as np
 
 def part1(raw: str, days: int) -> int:
+    """find the number of fish after `days` days"""
     nums = list(map(int, raw.split(',')))
     while days > 0:
         until = len(nums)
