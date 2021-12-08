@@ -39,3 +39,23 @@ def part1(lines: List[str]) -> int:
             if size == 2 or size == 4 or size == 3 or size == 7:
                 counter += 1
     return counter
+
+def part2(lines: List[str]) -> int:
+    """find the sum of all digits in the output"""
+    total = 0
+    digit_map = {}
+    for line in lines:
+        [digits_line, output_line] = line.split('|')
+        digits = digits_line.strip().split(' ')
+        outputs = output_line.strip().split(' ')
+        for digit in digits:
+            if len(digit) == 2:
+                digit_map[1] = list(map(str, digit))
+            if len(digit) == 4:
+                digit_map[4] = list(map(str, digit))
+            if len(digit) == 3:
+                digit_map[7] = list(map(str, digit))
+            if len(digit) == 7:
+                digit_map[8] = list(map(str, digit))
+        print(digit_map)
+    return total
