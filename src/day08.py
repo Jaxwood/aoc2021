@@ -1,31 +1,5 @@
 from typing import List
 
-num_to_segment_size = {
-    0: 6,
-    1: 2,
-    2: 5,
-    3: 5,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 3,
-    8: 7,
-    9: 6,
-}
-
-num_to_segments = {
-    0: ('a', 'b', 'c', 'e', 'f', 'g'),
-    1: ('c', 'f'),
-    2: ('a', 'c', 'd', 'e', 'g'),
-    3: ('a', 'c', 'd', 'f', 'g'),
-    4: ('b', 'c', 'd', 'f'),
-    5: ('a', 'b', 'd', 'f', 'g'),
-    6: ('a', 'b', 'd', 'e', 'f', 'g'),
-    7: ('a', 'c', 'f'),
-    8: ('a', 'b', 'c', 'd', 'e', 'f', 'g'),
-    9: ('a', 'b', 'c', 'd', 'f', 'g'),
-}
-
 def part1(lines: List[str]) -> int:
     """find the amount of times digit 1, 4, 7 and 8 appear in the output"""
     counter = 0
@@ -43,19 +17,88 @@ def part1(lines: List[str]) -> int:
 def part2(lines: List[str]) -> int:
     """find the sum of all digits in the output"""
     total = 0
-    digit_map = {}
     for line in lines:
         [digits_line, output_line] = line.split('|')
         digits = digits_line.strip().split(' ')
         outputs = output_line.strip().split(' ')
+
+        found = set()
+
+        # find 1, 4, 7 and 8
         for digit in digits:
             if len(digit) == 2:
-                digit_map[1] = list(map(str, digit))
-            if len(digit) == 4:
-                digit_map[4] = list(map(str, digit))
+                one = digit
+                found.add(one)
             if len(digit) == 3:
-                digit_map[7] = list(map(str, digit))
+                seven = digit
+                found.add(seven)
+            if len(digit) == 4:
+                four = digit
+                found.add(four)
             if len(digit) == 7:
-                digit_map[8] = list(map(str, digit))
-        print(digit_map)
+                eight = digit
+                found.add(eight)
+        # nine
+        for digit in digits:
+            if len(digit) == 6:
+                if len(set(digit).difference(set(seven + four))) == 1:
+                    nine = digit
+                    found.add(nine)
+        # two
+        for digit in digits:
+            if len(digit) == 5:
+                if len(set(digit).difference(set(nine))) == 1:
+                    two = digit
+                    found.add(two)
+        # three
+        for digit in digits:
+            if len(digit) == 5:
+                if len(set(one + two).difference(set(digit))) == 1 and digit not in found:
+                    three = digit
+                    found.add(three)
+        # five
+        for digit in digits:
+            if len(digit) == 5:
+                if digit not in found:
+                    five = digit
+                    found.add(five)
+        # six
+        for digit in digits:
+            if len(digit) == 6:
+                if digit not in found and len(set(one).difference(set(digit))) == 1:
+                    six = digit
+                    found.add(six)
+        # zero
+        for digit in digits:
+            if digit not in found:
+                zero = digit
+                found.add(zero)
+        
+        number = 0
+        multiplier = 1000
+        for output in outputs:
+            out = set(output)
+            if set(out) == set(zero):
+                number += multiplier * 0
+            if set(out) == set(one):
+                number += multiplier * 1
+            if set(out) == set(two):
+                number += multiplier * 2
+            if set(out) == set(three):
+                number += multiplier * 3
+            if set(out) == set(four):
+                number += multiplier * 4
+            if set(out) == set(five):
+                number += multiplier * 5
+            if set(out) == set(six):
+                number += multiplier * 6
+            if set(out) == set(seven):
+                number += multiplier * 7
+            if set(out) == set(eight):
+                number += multiplier * 8
+            if set(out) == set(nine):
+                number += multiplier * 9
+            multiplier //= 10
+        total += number
+
     return total
