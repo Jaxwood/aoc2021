@@ -44,18 +44,22 @@ def part1(input: List[str]) -> int:
 
     total = 0
     for _ in range(0, 100):
-        # print_state(state, len(input))
         total += tick(state, len(input[0]), len(input))
 
     return total
 
+def part2(input: List[str]) -> int:
+    """find when all flashes"""
+    state = dict()
 
-def print_state(state: Dict[Tuple[int, int], int], until: int) -> None:
-    """print current state"""
-    output = ""
-    for x in range(0, until):
-        for y in range(0, until):
-            output += str(state[(y, x)])
-        print(output)
-        output = ""
-    print("\n")
+    for x in range(0, len(input[0])):
+        for y in range(0, len(input)):
+            state[(x, y)] = int(input[y][x])
+
+    ticks = 0
+    total = 0
+    while total != len(state):
+        ticks += 1
+        total = tick(state, len(input[0]), len(input))
+
+    return ticks
