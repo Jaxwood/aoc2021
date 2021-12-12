@@ -1,7 +1,7 @@
 from typing import List, Tuple, Dict, Set
 
 
-def part1(input: List[str]) -> int:
+def part1(input: List[str], part1: bool = True) -> int:
     """find the number of unqiue paths in the maze"""
     # parse the input
     connections: Dict[str, Set[str]] = {}
@@ -19,14 +19,25 @@ def part1(input: List[str]) -> int:
     # find all the possible paths
     queue = [('start', [])]
     paths = []
+    ends = set(['start', 'end'])
     while len(queue) > 0:
         current, breadcrumb = queue.pop(0)
         if current == 'end':
             paths.append(breadcrumb + [current])
         else:
             for c in connections[current]:
-                if c.islower() and c not in breadcrumb:
-                    queue.append((c, breadcrumb + [current]))
+                if c.islower(): 
+                    if c not in breadcrumb and part1:
+                        queue.append((c, breadcrumb + [current]))
+                    if part1 == False:
+                        if c not in breadcrumb:
+                            queue.append((c, breadcrumb + [current]))
+                        else:
+                            lower_cases = list(filter(lambda x: x.islower() and x not in ends, breadcrumb + [current]))
+                            uniques = set(lower_cases)
+                            # allow one duplicate
+                            if len(lower_cases) == len(uniques) and c not in ends:
+                                queue.append((c, breadcrumb + [current]))
                 if c.isupper():
                     queue.append((c, breadcrumb + [current]))
 
