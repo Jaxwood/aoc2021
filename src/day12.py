@@ -32,14 +32,16 @@ def part1(input: List[str], part1: bool = True) -> int:
                     if part1 == False:
                         if c not in breadcrumb:
                             queue.append((c, breadcrumb + [current]))
+                        elif c in ends:
+                            continue
                         else:
-                            lower_cases = list(filter(lambda x: x.islower() and x not in ends, breadcrumb + [current]))
+                            lower_cases = list(filter(lambda x: x.islower(), breadcrumb + [current]))
                             uniques = set(lower_cases)
                             # allow one duplicate
-                            if len(lower_cases) == len(uniques) and c not in ends:
+                            if len(lower_cases) == len(uniques):
                                 queue.append((c, breadcrumb + [current]))
                 if c.isupper():
                     queue.append((c, breadcrumb + [current]))
 
-    # return the number of unique paths
+    # return the number of unique path
     return len(paths)
