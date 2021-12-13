@@ -70,13 +70,17 @@ def draw(coords: Dict[int, int]):
         print(line)
 
 
-def part1(raw: List[str]) -> int:
+def part1(raw: List[str], one_fold_only: bool) -> int:
     """find visible dots after folding."""
     coords, folds = parse(raw)
     # do only one fold
-    type, coord = folds[0]
-    if type == Foldable.Horizontal:
-        fold_horizontal(coords, coord)
-    else:
-        fold_vertical(coords, coord)
+    folds = [folds[0]] if one_fold_only else folds
+    for fold in folds:
+        type, coord = fold
+        if type == Foldable.Horizontal:
+            fold_horizontal(coords, coord)
+        else:
+            fold_vertical(coords, coord)
+    if one_fold_only == False:
+        draw(coords)
     return sum(filter(lambda x: x, coords.values()))

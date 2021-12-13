@@ -7,12 +7,14 @@ from src import day13
 class Day01TestSuite(unittest.TestCase):
     """Test Suite for Day13"""
     @parameterized.expand([
-        ("data/day13a.txt", 17),
-        ("data/day13.txt", 621),
+        ("data/day13a.txt", True, 17),
+        ("data/day13.txt", True, 621),
+        ("data/day13.txt", False, 95),
     ])
-    def test_part1(self, filename, expected):
+    def test_part1(self, filename, one_fold_only, expected):
         f = open(filename)
-        self.assertEquals(day13.part1(f.read().splitlines()), expected)
+        self.assertEquals(day13.part1(f.read().splitlines(), one_fold_only),
+                          expected)
 
 
 if __name__ == '__main__':
