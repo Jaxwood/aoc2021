@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 from enum import Enum
 
 
@@ -8,11 +8,9 @@ class Foldable(Enum):
     Vertical = 1
 
 
-def parse(
-    raw: List[str]
-) -> Tuple[List[Tuple[int, int]], List[Tuple[Foldable, int]]]:
+def parse(raw: List[str]) -> Tuple[Dict[int, int], List[Tuple[Foldable, int]]]:
     """parse the input into a list of coordinates and a list of folds."""
-    dots = []
+    dots = dict()
     coords = True
     folds = []
     for line in raw:
@@ -21,7 +19,7 @@ def parse(
             continue
         if coords:
             fst, snd = line.split(",")
-            dots.append((int(fst), int(snd)))
+            dots[(int(fst), int(snd))] = True
         else:
             fold_instruction = line.split(" ")
             t, c = fold_instruction[2].split("=")
@@ -33,7 +31,52 @@ def parse(
     return (dots, folds)
 
 
+def fold_horizontal(coords: Dict[int, int], coord: int) -> None:
+    """fold the horizontal line at coord."""
+    max_x = max(map(lambda x: x[0], coords.keys())) + 1
+    max_y = max(map(lambda x: x[1], coords.keys())) + 1
+    for y in range(0, max_y):
+        if y > coord:
+            for x in range(0, max_x):
+                if (x, y) in coords:
+                    del coords[(x, y)]
+                    coords[(x, coord - (y - coord))] = True
+
+
+def fold_vertical(coords: Dict[int, int], coord: int) -> None:
+    """fold the vertical line at coord."""
+    max_x = max(map(lambda x: x[0], coords.keys())) + 1
+    max_y = max(map(lambda x: x[1], coords.keys())) + 1
+    for y in range(0, max_y):
+        for x in range(0, max_x):
+            if x > coord:
+                if (x, y) in coords:
+                    del coords[(x, y)]
+                    coords[coord - (x - coord), y] = True
+
+
+def draw(coords: Dict[int, int]):
+    """draw the dots."""
+    max_x = max(map(lambda x: x[0], coords.keys()))
+    max_y = max(map(lambda x: x[1], coords.keys()))
+    print("\n")
+    for y in range(0, max_y + 1):
+        line = ""
+        for x in range(0, max_x + 1):
+            if (x, y) in coords:
+                line += "#"
+            else:
+                line += "."
+        print(line)
+
+
 def part1(raw: List[str]) -> int:
     """find visible dots after folding."""
     coords, folds = parse(raw)
-    return 0
+    # do only one fold
+    type, coord = folds[0]
+    if type == Foldable.Horizontal:
+        fold_horizontal(coords, coord)
+    else:
+        fold_vertical(coords, coord)
+    return sum(filter(lambda x: x, coords.values()))

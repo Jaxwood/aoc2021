@@ -8,6 +8,7 @@ class Day01TestSuite(unittest.TestCase):
     """Test Suite for Day13"""
     @parameterized.expand([
         ("data/day13a.txt", 17),
+        ("data/day13.txt", 621),
     ])
     def test_part1(self, filename, expected):
         f = open(filename)
