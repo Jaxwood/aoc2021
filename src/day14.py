@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from itertools import groupby
+from collections import deque
 
 
 def parse(raw: List[str]) -> List[Tuple[str, str]]:
@@ -14,19 +14,18 @@ def part1(raw: List[str], until: int) -> int:
     """substitute the input"""
     template = raw[0]
     rules = dict(parse(raw))
-    current = template
-
+    current = deque(template)
     # do the substitution until we reach the target
     for _ in range(0, until):
-        next = current[0]
-        for idx in range(0, len(current)):
-            segment = current[idx:idx + 2]
-            if len(segment) == 2:
-                if segment in rules:
-                    next += rules[segment] + segment[1]
-                else:
-                    next += segment
-        current = next
+        idx = 0
+        until = len(current) - 1
+        for _ in range(0, until):
+            if current[idx] in rules:
+                current[idx] = rules[current[idx]]
+            segment = current[idx] + current[idx + 1]
+            if len(segment) == 2 and segment in rules:
+                current.insert(idx + 1, rules[segment])
+                idx += 2
 
     # find most common and least common letter
     letters = {}
