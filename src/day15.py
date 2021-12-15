@@ -11,11 +11,22 @@ def neighbors(coord: Tuple[int, int]) -> List[Tuple[int, int]]:
 def build_maze(raw: List[str], times: int) -> Dict[Tuple[int, int], int]:
     """build a maze from a raw input and extend it by times"""
     maze = dict()
-    for time in range(0, times):
-        for y in range(0, len(raw)):
-            for x in range(0, len(raw[0])):
-                maze[(x, y)] = int(raw[y][x])
+    size = len(raw)
+
+    for y in range(0, times * len(raw)):
+        for x in range(0, times * len(raw[0])):
+            val = int(raw[y % size][x % size]) + (x // size) + (y // size)
+            maze[(x, y)] = val if val < 10 else val - 9
     return maze
+
+
+def draw(maze: Dict[Tuple[int, int], int]) -> None:
+    """draw the maze"""
+    for y in range(0, 50):
+        line = ""
+        for x in range(0, 50):
+            line += str(maze[(x, y)])
+        print(line)
 
 
 def part1(raw: List[str], times: int) -> int:
@@ -23,7 +34,7 @@ def part1(raw: List[str], times: int) -> int:
     maze = build_maze(raw, times)
     queue = PriorityQueue()
     queue.put((0, (0, 0)))
-    target = (len(raw[0]) - 1, len(raw) - 1)
+    target = (times * len(raw[0]) - 1, times * len(raw) - 1)
     visited = set()
     while not queue.empty():
         risk, next = queue.get()
