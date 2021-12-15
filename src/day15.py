@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 from queue import PriorityQueue
 
 
@@ -8,13 +8,19 @@ def neighbors(coord: Tuple[int, int]) -> List[Tuple[int, int]]:
     return [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
 
-def part1(raw: List[str]) -> int:
-    """find path with lowest risk level"""
+def build_maze(raw: List[str], times: int) -> Dict[Tuple[int, int], int]:
+    """build a maze from a raw input and extend it by times"""
     maze = dict()
-    for y in range(0, len(raw)):
-        for x in range(0, len(raw[0])):
-            maze[(x, y)] = int(raw[y][x])
+    for time in range(0, times):
+        for y in range(0, len(raw)):
+            for x in range(0, len(raw[0])):
+                maze[(x, y)] = int(raw[y][x])
+    return maze
 
+
+def part1(raw: List[str], times: int) -> int:
+    """find path with lowest risk level"""
+    maze = build_maze(raw, times)
     queue = PriorityQueue()
     queue.put((0, (0, 0)))
     target = (len(raw[0]) - 1, len(raw) - 1)
