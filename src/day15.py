@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple
 from queue import PriorityQueue
+from heapq import heappush, heappop
 
 
 def neighbors(coord: Tuple[int, int]) -> List[Tuple[int, int]]:
@@ -32,17 +33,17 @@ def draw(maze: Dict[Tuple[int, int], int]) -> None:
 def part1(raw: List[str], times: int) -> int:
     """find path with lowest risk level"""
     maze = build_maze(raw, times)
-    queue = PriorityQueue()
-    queue.put((0, (0, 0)))
+    queue = []
+    heappush(queue, (0, (0, 0)))
     target = (times * len(raw[0]) - 1, times * len(raw) - 1)
     visited = set()
-    while not queue.empty():
-        risk, next = queue.get()
+    while len(queue) > 0:
+        risk, next = heappop(queue)
         visited.add(next)
         if next == target:
             return risk
         for neighbor in neighbors(next):
             if neighbor in maze and neighbor not in visited:
-                queue.put((risk + maze[neighbor], neighbor))
+                heappush(queue, (risk + maze[neighbor], neighbor))
 
     return 0
