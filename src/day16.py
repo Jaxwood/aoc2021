@@ -37,7 +37,6 @@ def to_literal(binary: str) -> int:
 
 def operator(seq: str) -> int:
     """get the operator of the packet"""
-
     queue = [seq]
     total = 0
     while len(queue) > 0:
@@ -65,9 +64,6 @@ def operator(seq: str) -> int:
                 size = int(binary[header_size:header_size + bit_length], 2)
                 offset = header_size + bit_length
                 queue.append(binary[offset:])
-                # for i in range(1, size + 1):
-                # offset = header_size + (i * bit_length)
-                # queue.append(binary[offset:offset + bit_length])
     return total
 
 
