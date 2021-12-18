@@ -39,6 +39,8 @@ def part1(raw: List[str], times: int) -> int:
     visited = set()
     while len(queue) > 0:
         risk, next = heappop(queue)
+        if next in visited:
+            continue
         visited.add(next)
         if next == target:
             return risk
