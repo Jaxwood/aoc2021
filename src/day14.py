@@ -1,37 +1,37 @@
-from typing import List, Tuple
-from collections import deque
+from functools import lru_cache
+import string
+from typing import Dict, List, Tuple
+from collections import Counter
 
 
-def parse(raw: List[str]) -> List[Tuple[str, str]]:
+def parse(raw: List[str]) -> Tuple[Dict[str, Tuple[str, str]], List[str]]:
     """parse the input"""
-    for idx in range(0, len(raw)):
-        if idx < 2:
-            continue
-        yield tuple(raw[idx].split(" -> "))
+    template = raw[0]
+    rules = [rule.split(' ') for rule in raw[2:]]
+    rules = {a: (a[0] + c, c + a[1]) for a, _, c in rules}
+    pairs = [''.join(p) for p in zip(template, template[1:])]
+    return (rules, pairs)
 
 
-def part1(raw: List[str], until: int) -> int:
+def part1(raw: List[str], steps: int) -> int:
     """substitute the input"""
     template = raw[0]
-    rules = dict(parse(raw))
-    current = deque(template)
-    # do the substitution until we reach the target
-    for _ in range(0, until):
-        idx = 0
-        until = len(current) - 1
-        for _ in range(0, until):
-            if current[idx] in rules:
-                current[idx] = rules[current[idx]]
-            segment = current[idx] + current[idx + 1]
-            if len(segment) == 2 and segment in rules:
-                current.insert(idx + 1, rules[segment])
-                idx += 2
+    rules, pairs = parse(raw)
+    ctr = Counter(pairs)
+    for _ in range(steps):
+        newCtr = {key: 0 for key in rules.keys()}
+        for key, value in ctr.items():
+            newCtr[rules[key][0]] += value
+            newCtr[rules[key][1]] += value
+        ctr = newCtr
 
-    # find most common and least common letter
-    letters = {}
-    for x in current:
-        if x in letters:
-            letters[x] += 1
-        else:
-            letters[x] = 1
-    return max(letters.values()) - min(letters.values())
+    letterTotals = {letter: 0 for letter in list(string.ascii_uppercase)}
+    for key, value in ctr.items():
+        letterTotals[key[0]] += value
+
+    # the last character in the template gets another count
+    letterTotals[template[-1]] += 1
+
+    lmax = max(letterTotals.values())
+    lmin = min([value for value in letterTotals.values() if value > 0])
+    return lmax - lmin

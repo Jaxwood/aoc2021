@@ -9,6 +9,8 @@ class Day01TestSuite(unittest.TestCase):
     @parameterized.expand([
         ("data/day14a.txt", 10, 1588),
         ("data/day14.txt", 10, 2321),
+        ("data/day14a.txt", 40, 2188189693529),
+        ("data/day14.txt", 40, 2399822193707),
     ])
     def test_part1(self, filename, until, expected):
         f = open(filename)
