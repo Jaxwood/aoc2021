@@ -39,12 +39,17 @@ def part1(xs: Tuple[int, int], ys: Tuple[int, int]) -> int:
     y_max = 0
     to_x = max(xs[0], xs[1])
     to_y = min(ys[0], ys[1])
-    for x in range(1, to_x):
-        for y in range(to_y, abs(to_y)):
+    total = 0
+    for x in range(0, to_x + 1):
+        for y in range(to_y, abs(to_y - 1)):
             coord = (0, 0)
             velocity = (x, y)
-            while not within_target(coord, xs, ys) and not miss_target(
-                    coord, xs, ys):
+            best = 0
+            while not miss_target(coord, xs, ys):
                 coord, velocity = tick(coord, velocity)
-                y_max = max(y_max, coord[1])
-    return y_max
+                best = max(best, coord[1])
+                if within_target(coord, xs, ys):
+                    y_max = max(y_max, best)
+                    total += 1
+                    break
+    return (y_max, total)
