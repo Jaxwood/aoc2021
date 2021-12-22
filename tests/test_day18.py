@@ -35,6 +35,18 @@ class Day01TestSuite(unittest.TestCase):
     def test_can_split(self, candidate, expected):
         self.assertEquals(day18.can_split(candidate), expected)
 
+    @parameterized.expand([([[[[0, 7], 4], [15, [0, 13]]], [1,
+                                                            1]], [[[[0, 7], 4],
+                                                                   [[7, 8],
+                                                                    [0, 13]]],
+                                                                  [1, 1]]),
+                           ([[[[0, 7], 4], [[7, 8], [0, 13]]],
+                             [1, 1]], [[[[0, 7], 4], [[7, 8], [0, [6, 7]]]],
+                                       [1, 1]])])
+    def test_split(self, candidate, expected):
+        actual = day18.split(candidate)
+        self.assertEquals(actual, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,6 @@
 from typing import List
 from itertools import chain
+from math import ceil
 
 
 def parse(raw: List[str]) -> List:
@@ -24,12 +25,25 @@ def can_split(candidate: List) -> bool:
     return any(map(lambda x: x >= 10, flatten_list(candidate)))
 
 
-def split(candidate: List) -> List:
+def split(list_of_lists: List) -> List:
     """split the candidate"""
-    return candidate
+    def split_list(candidate: List, splitted: bool = False):
+        lst = []
+        for c in candidate:
+            if isinstance(c, list):
+                lst.append(split_list(c, splitted))
+            else:
+                if c >= 10 and not splitted:
+                    lst.append([c // 2, ceil(c / 2)])
+                    splitted = True
+                else:
+                    lst.append(c)
+        return lst
+
+    return split_list(list_of_lists, False)
 
 
-def can_explode(candidate: List, acc: int = 0) -> bool:
+def can_explode(candidate: List) -> bool:
     """check if the candidate can explode"""
     queue = [(candidate, 0)]
     while len(queue) > 0:
