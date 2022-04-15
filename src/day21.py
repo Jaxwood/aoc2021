@@ -1,3 +1,8 @@
+import functools
+import itertools
+from typing import Tuple
+
+
 class Die:
     def __init__(self):
         self.face = 1
@@ -11,9 +16,9 @@ class Die:
 
 
 class Player:
-    def __init__(self, position: int):
+    def __init__(self, position: int, points: int = 0):
         self.position = position
-        self.points = 0
+        self.points = points
 
     def move(self, die: int) -> None:
         self.position = 10 if (self.position +
@@ -44,3 +49,52 @@ def part1(player1_position: int, player2_position: int) -> int:
         player2.score()
 
     return player2.points * die.rolls if player1.points >= 1000 else player1.points * die.rolls
+
+
+die_combinations = [
+    (1, 1, 1),
+    (1, 1, 2),
+    (1, 1, 3),
+    (1, 2, 1),
+    (1, 2, 2),
+    (1, 2, 3),
+    (1, 3, 1),
+    (1, 3, 2),
+    (1, 3, 3),
+    (2, 1, 1),
+    (2, 1, 2),
+    (2, 1, 3),
+    (2, 2, 1),
+    (2, 2, 2),
+    (2, 2, 3),
+    (2, 3, 1),
+    (2, 3, 2),
+    (2, 3, 3),
+    (3, 1, 1),
+    (3, 1, 2),
+    (3, 1, 3),
+    (3, 2, 1),
+    (3, 2, 2),
+    (3, 2, 3),
+    (3, 3, 1),
+    (3, 3, 2),
+    (3, 3, 3),
+]
+
+
+@functools.lru_cache(maxsize=None)
+def part2(position1: int, score1: int, position2: int,
+          score2: int) -> Tuple[int, int]:
+    """play a game of Dirac dice"""
+    win1 = win2 = 0
+    for die in die_combinations:
+        total = (position1 + sum(die)) % 10
+        p1_copy = 10 if total == 0 else total
+        s1_copy = score1 + p1_copy
+        if s1_copy >= 21:
+            win1 += 1
+        else:
+            w2_copy, w1_copy = part2(position2, score2, p1_copy, s1_copy)
+            win1 += w1_copy
+            win2 += w2_copy
+    return win1, win2
