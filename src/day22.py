@@ -1,7 +1,8 @@
-from typing import List, Tuple
+from typing import List, Tuple, Callable
 from itertools import compress
 import re
 
+Point = Tuple[int, int]
 
 class Cuboid:
     """Represents a cuboid of a grid"""
@@ -21,17 +22,6 @@ class Cuboid:
         return f'{self.toggle} x={self.x_min}..{self.x_max}, y={self.y_min}..{self.y_max}, z={self.z_min}..{self.z_max}'
 
 
-def check_within_region(cuboid: Cuboid) -> bool:
-    """Check if a point is within the cubic region defined by the cuboid"""
-    region = Cuboid('on', -50, 50, -50, 50, -50, 50)
-
-    if ((region.x_max >= cuboid.x_min or region.x_min <= cuboid.x_max) and
-        (region.y_max >= cuboid.y_min or region.y_min <= cuboid.y_max) and
-        (region.z_max >= cuboid.z_min or region.z_min <= cuboid.z_max)):
-        return True
-    return False
-
-
 def parse(lines: List[str]) -> List[Cuboid]:
     """Parse the input inmin a list of Cuboid objects"""
     result: List[Cuboid] = []
@@ -45,14 +35,13 @@ def parse(lines: List[str]) -> List[Cuboid]:
     return result
 
 
-def points_in_cubic(cuboid: Cuboid) -> List[Tuple[int, int, int]]:
+def points_in_cubic(cuboid: Cuboid, min_fn: Callable[[int, int], int], max_fn: Callable[[int, int], int]) -> List[Tuple[int, int, int]]:
     """Returns a list of all points in the cubic region defined by the cuboid"""
     result: List[Tuple[int, int, int]] = []
-    for x in range(max(cuboid.x_min, -50), min(cuboid.x_max, 50) + 1):
-        for y in range(max(cuboid.y_min, -50), min(cuboid.y_max, 50) + 1):
-            for z in range(max(cuboid.z_min, -50), min(cuboid.z_max, 50) + 1):
-                if check_within_region(cuboid):
-                    result.append((x, y, z))
+    for x in range(max_fn(cuboid.x_min), min_fn(cuboid.x_max)):
+        for y in range(max_fn(cuboid.y_min), min_fn(cuboid.y_max)):
+            for z in range(max_fn(cuboid.z_min), min_fn(cuboid.z_max)):
+                result.append((x, y, z))
     return result
 
 
@@ -62,7 +51,7 @@ def part1(lines: List[str]) -> int:
     grid: Dict[Tuple[int, int, int], bool] = {}
 
     for cuboic in cuboics:
-        for point in points_in_cubic(cuboic):
+        for point in points_in_cubic(cuboic, lambda x: min(x, 50) + 1, lambda x: max(x, -50)):
             if cuboic.toggle == 'on':
                 grid[point] = True
             elif cuboic.toggle == 'off':

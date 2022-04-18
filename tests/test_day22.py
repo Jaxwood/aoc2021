@@ -15,5 +15,12 @@ class Day22TestSuite(unittest.TestCase):
         f = open(filename)
         self.assertEquals(day22.part1(f.read().splitlines()), expected)
 
+    @parameterized.expand([
+        ('data/day22c.txt', 2758514936282235),
+    ])
+    def _test_part2(self, filename, expected):
+        f = open(filename)
+        self.assertEquals(day22.part2(f.read().splitlines()), expected)
+
 if __name__ == '__main__':
     unittest.main()
