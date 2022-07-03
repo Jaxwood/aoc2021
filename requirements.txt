@@ -1,4 +1,3 @@
-nose
-sphinx
-parameterized
-numpy
+requirements.txt found in /Users/jlo/code/github/aoc2021 instead of Pipfile! Converting...
+Warning: Your Pipfile now contains pinned versions, if your requirements.txt did. 
+We recommend updating your Pipfile to specify the "*" version, instead.
