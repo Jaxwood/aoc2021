@@ -5,11 +5,29 @@ from typing import Set, Dict, List, Tuple
 from queue import PriorityQueue
 
 hallway = [(1, 1), (2, 1), (4, 1), (6, 1), (8, 1), (10, 1), (11, 1)]
-amber_room = [(3, 2), (3, 3)]
-bronze_room = [(5, 2), (5, 3)]
-copper_room = [(7, 2), (7, 3)]
-desert_room = [(9, 2), (9, 3)]
-rooms = amber_room + bronze_room + copper_room + desert_room
+
+
+def amber_room(part2: bool):
+    return [(3, 2), (3, 3), (3, 4), (3, 5)] if part2 else [(3, 2), (3, 3)]
+
+
+def bronze_room(part2: bool):
+    return [(5, 2), (5, 3), (5, 4), (5, 5)] if part2 else [(5, 2), (5, 3)]
+
+
+def copper_room(part2: bool):
+    return [(7, 2), (7, 3), (7, 4), (7, 5)] if part2 else [(7, 2), (7, 3)]
+
+
+def desert_room(part2: bool):
+    return [(9, 2), (9, 3), (9, 4), (9, 5)] if part2 else [(9, 2), (9, 3)]
+
+
+def rooms(part2: bool):
+    return amber_room(part2) + bronze_room(part2) + copper_room(
+        part2) + desert_room(part2)
+
+
 cost_lookup = {
     'A': 1,
     'B': 10,
@@ -38,9 +56,8 @@ def get_amphipods(burrow: Dict[Tuple[int, int], str]) -> List[Tuple[int, int]]:
     return sorted(amphipods)
 
 
-def possible_moves(
-        burrow: Dict[Tuple[int, int], str],
-        coord: Tuple[int, int]) -> List[Tuple[Tuple[int, int], int]]:
+def possible_moves(burrow: Dict[Tuple[int, int], str], coord: Tuple[int, int],
+                   part2: bool) -> List[Tuple[Tuple[int, int], int]]:
     """Get all the possible moves from the given coord.
     It doesn't check if the move is valid.
     Returns a list of tuples of the form (coord, cost)"""
@@ -54,23 +71,23 @@ def possible_moves(
             cell = (adjecent, total + cost_lookup[amphipod])
             if adjecent in visited:
                 continue
-            if adjecent in hallway or adjecent in rooms:
+            if adjecent in hallway or adjecent in rooms(part2):
                 result.append(cell)
             visited.add(adjecent)
             queue.append(cell)
     return result
 
 
-def get_room_for_amphipod(amphipod: str) -> List[Tuple[int, int]]:
+def get_room_for_amphipod(amphipod: str, part2: bool) -> List[Tuple[int, int]]:
     """Get the room for the given amphipod"""
     if amphipod == 'A':
-        return amber_room
+        return amber_room(part2)
     if amphipod == 'B':
-        return bronze_room
+        return bronze_room(part2)
     if amphipod == 'C':
-        return copper_room
+        return copper_room(part2)
     if amphipod == 'D':
-        return desert_room
+        return desert_room(part2)
     raise Exception("Unknown amphipod: {}".format(amphipod))
 
 
@@ -93,11 +110,11 @@ def parse(lines: List[str]) -> Dict[Tuple[int, int], str]:
     return burrow
 
 
-def done(burrow: Dict[Tuple[int, int], str]) -> bool:
-    amber_room_done = all(map(lambda x: burrow[x] == 'A', amber_room))
-    bronze_room_done = all(map(lambda x: burrow[x] == 'B', bronze_room))
-    copper_room_done = all(map(lambda x: burrow[x] == 'C', copper_room))
-    desert_room_done = all(map(lambda x: burrow[x] == 'D', desert_room))
+def done(burrow: Dict[Tuple[int, int], str], part2: bool) -> bool:
+    amber_room_done = all(map(lambda x: burrow[x] == 'A', amber_room(part2)))
+    bronze_room_done = all(map(lambda x: burrow[x] == 'B', bronze_room(part2)))
+    copper_room_done = all(map(lambda x: burrow[x] == 'C', copper_room(part2)))
+    desert_room_done = all(map(lambda x: burrow[x] == 'D', desert_room(part2)))
     return all([
         amber_room_done, bronze_room_done, copper_room_done, desert_room_done
     ])
@@ -127,7 +144,7 @@ class PrioritizedItem:
     item: Dict[Tuple[int, int], str] = field(compare=False)
 
 
-def part1(lines: List[str]) -> int:
+def part1(lines: List[str], part2: bool) -> int:
     q = PriorityQueue()
     q.put(PrioritizedItem(0, parse(lines)))
     visited: Set[str] = set()
@@ -143,11 +160,11 @@ def part1(lines: List[str]) -> int:
         #draw(burrow)
         amphipods = get_amphipods(burrow)
         for amphipod in amphipods:
-            amphipod_room = get_room_for_amphipod(burrow[amphipod])
+            amphipod_room = get_room_for_amphipod(burrow[amphipod], part2)
             if is_correct_room(burrow, amphipod_room, burrow[amphipod],
                                amphipod):
                 continue
-            moves = possible_moves(burrow, amphipod)
+            moves = possible_moves(burrow, amphipod, part2)
             if len(moves) == 0:
                 continue
             # hallway to room
@@ -158,11 +175,11 @@ def part1(lines: List[str]) -> int:
                         new_burrow = copy.deepcopy(burrow)
                         new_burrow[move] = new_burrow[amphipod]
                         new_burrow[amphipod] = '.'
-                        if done(new_burrow):
+                        if done(new_burrow, part2):
                             return cost + total
                         q.put(PrioritizedItem(cost + total, new_burrow))
             # room to hallway or room
-            if amphipod in rooms:
+            if amphipod in rooms(part2):
                 for (move, total) in moves:
                     new_burrow = copy.deepcopy(burrow)
                     # move from room to room
@@ -176,6 +193,6 @@ def part1(lines: List[str]) -> int:
                         new_burrow[move] = new_burrow[amphipod]
                         new_burrow[amphipod] = '.'
                         q.put(PrioritizedItem(cost + total, new_burrow))
-                    if done(new_burrow):
+                    if done(new_burrow, part2):
                         return cost + total
     return 0
