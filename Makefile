@@ -1,5 +1,9 @@
+SHELL:=/bin/bash
+
 init:
-	pip3 install -r requirements.txt
+	pyenv install 3.9 -s
+	pipenv install
+	pipenv shell
 
 test:
 	nosetests tests
