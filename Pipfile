@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-nose = "*"
+pytest = "*"
 sphinx = "*"
 parameterized = "*"
 numpy = "*"
@@ -14,7 +14,7 @@ yapf = "*"
 radon = "*"
 
 [scripts]
-test = "nosetests"
+test = "pytest"
 
 [requires]
 python_version = "3.9"

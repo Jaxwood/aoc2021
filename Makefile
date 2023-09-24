@@ -1,10 +1,9 @@
 SHELL:=/bin/bash
 
 init:
-	pyenv install 3.9 -s
-	pipenv install
-	pipenv shell
-
+	python3 -m venv env
+	source env/bin/activate
+	pip install -r requirements.txt
 test:
-	nosetests tests
+	pytest
 
