@@ -14,7 +14,7 @@ class Day01TestSuite(unittest.TestCase):
     ])
     def test_part1(self, filename, until, expected):
         f = open(filename)
-        self.assertEquals(day14.part1(f.read().splitlines(), until), expected)
+        self.assertEqual(day14.part1(f.read().splitlines(), until), expected)
 
 
 if __name__ == '__main__':

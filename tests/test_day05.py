@@ -24,15 +24,15 @@ class Day01TestSuite(unittest.TestCase):
             "0,0 -> 8,8",
             "5,5 -> 8,2"
         ]
-        self.assertEquals(day05.overlap(coords, diagonal), expected)
+        self.assertEqual(day05.overlap(coords, diagonal), expected)
 
     def test_part1(self):
         f = open('data/day05.txt')
-        self.assertEquals(day05.overlap(f.read().splitlines()), 6311)
+        self.assertEqual(day05.overlap(f.read().splitlines()), 6311)
 
     def test_part2(self):
         f = open('data/day05.txt')
-        self.assertEquals(day05.overlap(f.read().splitlines(), True), 19929)
+        self.assertEqual(day05.overlap(f.read().splitlines(), True), 19929)
 
 if __name__ == '__main__':
     unittest.main()

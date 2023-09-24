@@ -17,7 +17,7 @@ class Day01TestSuite(unittest.TestCase):
          960),
     ])
     def test_part1(self, packet, expected):
-        self.assertEquals(day16.part1(packet), expected)
+        self.assertEqual(day16.part1(packet), expected)
 
     @parameterized.expand([
         ("C200B40A82", 3),
@@ -30,14 +30,14 @@ class Day01TestSuite(unittest.TestCase):
         ("9C0141080250320F1802104A08", 1),
     ])
     def test_part2(self, packet, expected):
-        self.assertEquals(day16.part2(packet), expected)
+        self.assertEqual(day16.part2(packet), expected)
 
     @parameterized.expand([
         ("D2FE28", (2021, '000')),
     ])
     def test_literal_value(self, packet, expected):
         binary = day16.to_binary(packet)
-        self.assertEquals(day16.to_literal(binary), expected)
+        self.assertEqual(day16.to_literal(binary), expected)
 
     @parameterized.expand([
         ("38006F45291200",
@@ -52,7 +52,7 @@ class Day01TestSuite(unittest.TestCase):
          )
     ])
     def test_to_binary(self, hex, expected):
-        self.assertEquals(day16.to_binary(hex), expected)
+        self.assertEqual(day16.to_binary(hex), expected)
 
 
 if __name__ == '__main__':

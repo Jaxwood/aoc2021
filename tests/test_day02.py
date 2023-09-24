@@ -18,11 +18,11 @@ class Day01TestSuite(unittest.TestCase):
             "down 8",
             "forward 2"
             ]
-        self.assertEquals(day02.calculate_depth(input), 150)
+        self.assertEqual(day02.calculate_depth(input), 150)
 
     def test_part1(self):
         f = open('data/day02.txt')
-        self.assertEquals(day02.calculate_depth(f.read().splitlines()), 1855814)
+        self.assertEqual(day02.calculate_depth(f.read().splitlines()), 1855814)
 
     def test_calculate_depth_with_aim(self):
         input = [
@@ -33,11 +33,11 @@ class Day01TestSuite(unittest.TestCase):
             "down 8",
             "forward 2"
             ]
-        self.assertEquals(day02.calculate_depth_with_aim(input), 900)
+        self.assertEqual(day02.calculate_depth_with_aim(input), 900)
 
     def test_part2(self):
         f = open('data/day02.txt')
-        self.assertEquals(day02.calculate_depth_with_aim(f.read().splitlines()), 1845455714)
+        self.assertEqual(day02.calculate_depth_with_aim(f.read().splitlines()), 1845455714)
 
 
 if __name__ == '__main__':

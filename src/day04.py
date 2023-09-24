@@ -23,7 +23,7 @@ def parse(raw: List[str]) -> Tuple[List[int], List[List[List[int]]]]:
             boards.append(board)
             board = []
         else:
-            chuncks = re.findall('\d+', line)
+            chuncks = re.findall(r'\d+', line)
             board.append(list(map(int, chuncks)))
     boards.append(board)
     return (numbers, boards)

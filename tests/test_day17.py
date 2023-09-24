@@ -11,14 +11,14 @@ class Day01TestSuite(unittest.TestCase):
         (236, 262, -78, -58, 3003),
     ])
     def test_part1(self, x1, x2, y1, y2, expected):
-        self.assertEquals(day17.part1((x1, x2), (y1, y2))[0], expected)
+        self.assertEqual(day17.part1((x1, x2), (y1, y2))[0], expected)
 
     @parameterized.expand([
         (20, 30, -10, -5, 112),
         (236, 262, -78, -58, 940),
     ])
     def test_part2(self, x1, x2, y1, y2, expected):
-        self.assertEquals(day17.part1((x1, x2), (y1, y2))[1], expected)
+        self.assertEqual(day17.part1((x1, x2), (y1, y2))[1], expected)
 
 
 if __name__ == '__main__':

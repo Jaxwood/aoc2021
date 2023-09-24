@@ -15,7 +15,7 @@ class Day01TestSuite(unittest.TestCase):
          256, 1708791884591)
     ])
     def test_part1(self, seq, days, expected):
-        self.assertEquals(day06.part1(seq, days), expected)
+        self.assertEqual(day06.part1(seq, days), expected)
 
 
 if __name__ == '__main__':

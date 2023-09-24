@@ -10,13 +10,13 @@ class Day01TestSuite(unittest.TestCase):
                            ("data/day10.txt", 339537)])
     def test_part1(self, filename, expected):
         f = open(filename)
-        self.assertEquals(day10.part1(f.read().splitlines()), expected)
+        self.assertEqual(day10.part1(f.read().splitlines()), expected)
 
     @parameterized.expand([("data/day10a.txt", 288957),
                            ("data/day10.txt", 2412013412)])
     def test_part2(self, filename, expected):
         f = open(filename)
-        self.assertEquals(day10.part2(f.read().splitlines()), expected)
+        self.assertEqual(day10.part2(f.read().splitlines()), expected)
 
 
 if __name__ == '__main__':

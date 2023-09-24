@@ -13,7 +13,7 @@ class Day01TestSuite(unittest.TestCase):
     ])
     def test_part1(self, filename, one_fold_only, expected):
         f = open(filename)
-        self.assertEquals(day13.part1(f.read().splitlines(), one_fold_only),
+        self.assertEqual(day13.part1(f.read().splitlines(), one_fold_only),
                           expected)
 
 

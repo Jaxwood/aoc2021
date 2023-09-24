@@ -13,7 +13,7 @@ class Day25TestSuite(unittest.TestCase):
     ])
     def test_part1(self, filename, expected):
         f = open(filename)
-        self.assertEquals(day25.part1(f.read().splitlines()), expected)
+        self.assertEqual(day25.part1(f.read().splitlines()), expected)
 
 
 if __name__ == '__main__':

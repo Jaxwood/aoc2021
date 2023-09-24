@@ -22,11 +22,11 @@ class Day01TestSuite(unittest.TestCase):
             "00010",
             "01010"
             ]
-        self.assertEquals(day03.calculate_power_consumption(input), 198)
+        self.assertEqual(day03.calculate_power_consumption(input), 198)
 
     def test_part1(self):
         f = open('data/day03.txt')
-        self.assertEquals(day03.calculate_power_consumption(f.read().splitlines()), 2261546)
+        self.assertEqual(day03.calculate_power_consumption(f.read().splitlines()), 2261546)
 
     def test_life_support_rating(self):
         input = [
@@ -43,11 +43,11 @@ class Day01TestSuite(unittest.TestCase):
             "00010",
             "01010"
             ]
-        self.assertEquals(day03.calculate_life_support_rating(input), 230)
+        self.assertEqual(day03.calculate_life_support_rating(input), 230)
 
     def test_part2(self):
         f = open('data/day03.txt')
-        self.assertEquals(day03.calculate_life_support_rating(f.read().splitlines()), 6775520)
+        self.assertEqual(day03.calculate_life_support_rating(f.read().splitlines()), 6775520)
 
 if __name__ == '__main__':
     unittest.main()

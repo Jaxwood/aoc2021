@@ -21,11 +21,11 @@ class Day01TestSuite(unittest.TestCase):
                 269,
                 260,
                 263]
-        self.assertEquals(day01.increases(input), 7)
+        self.assertEqual(day01.increases(input), 7)
 
     def test_part1(self):
         f = open('data/day01.txt')
-        self.assertEquals(day01.increases(list(map(int, f.read().splitlines()))), 1529)
+        self.assertEqual(day01.increases(list(map(int, f.read().splitlines()))), 1529)
 
     def test_measurements_window_increases(self):
         input = [
@@ -39,11 +39,11 @@ class Day01TestSuite(unittest.TestCase):
                 269,
                 260,
                 263]
-        self.assertEquals(day01.window_increases(input), 5)
+        self.assertEqual(day01.window_increases(input), 5)
 
     def test_part2(self):
         f = open('data/day01.txt')
-        self.assertEquals(day01.window_increases(list(map(int, f.read().splitlines()))), 1567)
+        self.assertEqual(day01.window_increases(list(map(int, f.read().splitlines()))), 1567)
 
 
 if __name__ == '__main__':
